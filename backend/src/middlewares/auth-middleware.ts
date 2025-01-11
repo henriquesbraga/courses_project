@@ -16,7 +16,7 @@ export const authenticate = (
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
-    res.status(401).json({ error: "Token não informado" });
+    res.status(401).json({ message: "Token não informado" });
     return;
   }
 
@@ -26,7 +26,7 @@ export const authenticate = (
     req.user = { userId: decoded.userId, email: decoded.email };
     next();
   } catch (error) {
-    res.status(401).json({ error: "Token inválido ou expirado" });
+    res.status(401).json({ message: "Token inválido ou expirado" });
     return;
   }
 };

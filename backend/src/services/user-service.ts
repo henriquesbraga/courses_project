@@ -1,9 +1,12 @@
 import bcrypt from "bcrypt";
-import { createUser, getUserByEmail } from "../repositories/user-repository";
+import {
+  createUser,
+  getUserByEmail,
+  getUserById,
+} from "../repositories/user-repository";
 import { CreateUserDto } from "../types/create-user-dto";
 import { omit } from "../utils/omit";
 import { CustomJwtPayload, JwtService } from "./jwt-service";
-import { format } from "path";
 import { formatDate } from "../utils/date-utils";
 
 const { SALT_ROUNDS } = process.env;
@@ -23,6 +26,21 @@ async function create(user: CreateUserDto) {
 
 async function findByEmail(email: string) {
   return await getUserByEmail(email);
+}
+
+async function findById(id: number, bearerToken: string) {
+  // User can only fetch his own data
+  const tokenData: CustomJwtPayload = JwtService.verifyToken(bearerToken);
+
+  if (tokenData.userId !== id) {
+    throw new Error("Usuário não autorizado");
+  }
+
+  const data = await getUserById(id);
+
+  if (data) {
+    return omit(data, ["password_user_tbu"]);
+  }
 }
 
 async function loginUser(email: string, password: string) {
@@ -78,4 +96,7 @@ async function refreshUserToken(bearerToken: string) {
   }
 }
 
-export { create, loginUser, refreshUserToken };
+
+
+
+export { create, loginUser, refreshUserToken, findById };
