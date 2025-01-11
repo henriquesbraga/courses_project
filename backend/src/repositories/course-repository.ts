@@ -2,20 +2,20 @@ import sql from "../database/connection";
 import { Course } from "../types/course";
 import { CreateCourseDto } from "../types/create-course-dto";
 import { EnrollUserToCourse } from "../types/enroll-user-to-course";
-import { getFormattedDate } from "../utils/date-utils";
+import { formatDate, getFormattedDate } from "../utils/date-utils";
 
 async function createCourse(course: CreateCourseDto): Promise<Course> {
   try {
     const result = await sql<Course[]>`
-    INSERT INTO public.tb_courses_tbc (
-      title_course_tbc,
-      description_course_tbc,
-      workload_course_tbc,
+    INSERT INTO public.courses (
+      title,
+      description,
+      hours,
       created_at
     ) VALUES (
       ${course.title},
       ${course.description},
-      ${course.workload},
+      ${course.hours},
       ${getFormattedDate()}
     ) RETURNING *`;
 
@@ -30,14 +30,14 @@ async function getAllCourses(): Promise<Course[]> {
   try {
     const result = await sql<Course[]>`
     SELECT
-      id_course_tbc,
-      title_course_tbc,
-      description_course_tbc,
-      workload_course_tbc,
+      id,
+      title,
+      description,
+      hours,
       created_at
     FROM 
-      public.tb_courses_tbc`;
-    return result;
+      public.courses`;
+    return result.map((e) => ({ ...e, created_at: formatDate(e.created_at) }));
   } catch (error: any) {
     console.log("Erro ao buscar cursos: ", error.message);
     throw new Error(error.message);
@@ -48,19 +48,23 @@ async function getCoursesByUserId(userId: number): Promise<Course[]> {
   try {
     const result = await sql<Course[]>`
     SELECT 
-      c.id_course_tbc,
-      c.title_course_tbc,
-      c.description_course_tbc,
-      c.workload_course_tbc,
-      c.created_at AS course_created_at,
-      r.registered_at AS user_registered_at
+      c.id,
+      c.title,
+      c.description,
+      c.hours,
+      c.created_at,
+      e.enrolled_at
     FROM 
-      rel_courses_users r
+      enrollments e
     INNER JOIN
-      tb_courses_tbc c ON r.id_course_tbc = c.id_course_tbc
+      courses c ON e.id = c.id
     WHERE 
-      r.id_user_tbu = ${userId};`;
-    return result;
+      e.id = ${userId};`;
+    return result.map((e) => ({
+      ...e,
+      created_at: formatDate(e.created_at),
+      enrolled_at: formatDate(e.enrolled_at!),
+    }));
   } catch (error: any) {
     console.log("Erro ao buscar curso: ", error.message);
     throw new Error(error.message);
@@ -70,16 +74,15 @@ async function getCoursesByUserId(userId: number): Promise<Course[]> {
 async function registerUserInCourse(enroll: EnrollUserToCourse) {
   try {
     await sql`
-    INSERT INTO public.rel_courses_users (
-      id_course_tbc,
-      id_user_tbu,
-      registered_at
+    INSERT INTO public.enrollments (
+      user_id,
+      course_id,
+      enrolled_at
     ) VALUES (
-      ${enroll.courseId},
       ${enroll.userId},
+      ${enroll.courseId},
       ${getFormattedDate()}
-    )ON CONFLICT (id_course_tbc, id_user_tbu) DO NOTHING;`;
-
+    ) ON CONFLICT (user_id, course_id) DO NOTHING;`;
     return true;
   } catch (error: any) {
     console.log("Erro ao cadastrar curso: ", error.message);

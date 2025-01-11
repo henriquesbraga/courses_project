@@ -1,3 +1,3 @@
 import { Course } from "./course";
 
-export type CreateCourseDto = Omit<Course, "idCourse" | "createdAt">;
+export type CreateCourseDto = Omit<Course, "id" | "created_at">;

@@ -10,7 +10,8 @@ function getFormattedDate() {
 }
 
 function formatDate(date: string) {
-  return dayjs(date).tz("America/Sao_Paulo").format("YYYY-MM-DDTHH:mm:ssZ");
+  return dayjs(date).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm:ss");
 }
+
 
 export { getFormattedDate, formatDate };

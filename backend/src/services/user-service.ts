@@ -14,12 +14,13 @@ const { SALT_ROUNDS } = process.env;
 async function createUserService(user: CreateUserDto) {
   try {
     const salt = await bcrypt.genSalt(Number(SALT_ROUNDS));
-    const hash = await bcrypt.hash(user.password_user_tbu, salt);
-    user.password_user_tbu = hash;
+    const hash = await bcrypt.hash(user.password, salt);
+    user.password = hash;
     const createdUser = await createUser(user);
-    const userWithoutPassword = omit(createdUser, ["password_user_tbu"]);
+    const userWithoutPassword = omit(createdUser, ["password"]);
     return userWithoutPassword;
   } catch (err: any) {
+    console.log(err)
     throw err;
   }
 }
@@ -37,9 +38,15 @@ async function findByIdService(id: number, bearerToken: string) {
   }
 
   const data = await getUserById(id);
-
+  var entity =  {
+    ...data,
+    created_at: formatDate(data?.created_at!)
+  }
+  
+  
+  
   if (data) {
-    return omit(data, ["password_user_tbu"]);
+    return entity
   }
 }
 
@@ -53,7 +60,7 @@ async function loginUserService(email: string, password: string) {
 
     const isPasswordValid = await bcrypt.compare(
       password,
-      user.password_user_tbu
+      user.password
     );
 
     if (!isPasswordValid) {
@@ -61,11 +68,11 @@ async function loginUserService(email: string, password: string) {
     }
 
     const token = JwtService.generateToken({
-      userId: user.id_user_tbu,
-      email: user.email_user_tbu,
+      userId: user.id,
+      email: user.email,
     });
 
-    const userWithoutPassword = omit(user, ["password_user_tbu"]);
+    const userWithoutPassword = omit(user, ["password"]);
 
     return {
       ...userWithoutPassword,

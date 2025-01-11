@@ -18,6 +18,7 @@ async function createCourseEndpoint(req: Request, res: Response) {
 }
 
 async function getAllCoursesEndpoint(req: Request, res: Response) {
+  
   try {
     const result = await getAllCoursesService();
     res.status(201).json(result);

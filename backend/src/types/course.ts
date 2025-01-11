@@ -1,7 +1,8 @@
 export type Course = {
-  idCourse: number;
+  id: number;
   title: string;
   description: string;
-  workload: number; //hours
-  createdAt: String;
+  hours: number;
+  created_at: string;
+  enrolled_at?: string | null;
 }

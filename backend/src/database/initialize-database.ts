@@ -51,4 +51,4 @@ async function initializeDatabase(...files: string[]) {
   }
 }
 
-initializeDatabase("tb_users_tbu.sql", "tb_courses_tbc.sql", "rel_courses_users.sql");
+initializeDatabase("users.sql", "courses.sql", "enrollments.sql");

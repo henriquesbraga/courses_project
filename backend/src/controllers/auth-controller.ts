@@ -12,9 +12,9 @@ async function registerEndpoint(req: Request, res: Response) {
 
   try {
     const user: CreateUserDto = {
-      name_user_tbu: name,
-      email_user_tbu: email,
-      password_user_tbu: password,
+      name: name,
+      email: email,
+      password: password,
     };
 
     const newUser = await createUserService(user);
