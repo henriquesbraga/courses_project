@@ -1,4 +1,8 @@
+const { JWT_SECRET } = process.env;
+
+
+
 export const jwtConfig = {
-  secret: process.env.JWT_SECRET || "your-secret-key",
+  secret: JWT_SECRET!,
   expiresIn: "1h",
 };

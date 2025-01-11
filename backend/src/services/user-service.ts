@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import { createUser, getUserByEmail } from "../repositories/user-repository";
 import { CreateUserDto } from "../types/create-user-dto";
 import { omit } from "../utils/omit";
-import { JwtService } from "./jwt-service";
+import { CustomJwtPayload, JwtService } from "./jwt-service";
 import { format } from "path";
 import { formatDate } from "../utils/date-utils";
 
@@ -28,7 +28,6 @@ async function findByEmail(email: string) {
 async function loginUser(email: string, password: string) {
   try {
     const user = await findByEmail(email);
-
 
     if (!user) {
       throw new Error("Usuário não encontrado");
@@ -60,4 +59,23 @@ async function loginUser(email: string, password: string) {
   }
 }
 
-export { create, loginUser };
+async function refreshUserToken(bearerToken: string) {
+  try {
+    const data: CustomJwtPayload = JwtService.verifyToken(bearerToken);
+
+    if (!data) {
+      throw new Error("Usuário não encontrado");
+    }
+
+    const token = JwtService.generateToken({
+      userId: data.userId,
+      email: data.email,
+    });
+
+    return token;
+  } catch (error: any) {
+    throw error;
+  }
+}
+
+export { create, loginUser, refreshUserToken };

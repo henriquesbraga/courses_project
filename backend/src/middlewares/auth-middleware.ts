@@ -16,7 +16,8 @@ export const authenticate = (
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
-    return res.status(401).json({ error: "Token not provided" });
+    res.status(401).json({ error: "Token não informado" });
+    return;
   }
 
   const token = authHeader.split(" ")[1];
@@ -25,6 +26,7 @@ export const authenticate = (
     req.user = { userId: decoded.userId, email: decoded.email };
     next();
   } catch (error) {
-    return res.status(401).json({ error: "Invalid Token or expired" });
+    res.status(401).json({ error: "Token inválido ou expirado" });
+    return;
   }
 };
