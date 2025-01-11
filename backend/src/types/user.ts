@@ -3,6 +3,5 @@ export type User = {
   name_user_tbu: string;
   email_user_tbu: string;
   password_user_tbu: string;
-  is_active_user_tbu: boolean;
   created_at: string;
 }

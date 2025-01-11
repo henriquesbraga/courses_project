@@ -30,11 +30,10 @@ async function getUserByEmail(email: string): Promise<User | null> {
   try {
     const result = await sql<User[]>`
     SELECT
-      id_user_tbu ,
+      id_user_tbu,
       name_user_tbu,
       email_user_tbu,
       password_user_tbu,
-      is_active_user_tbu,
       created_at
     FROM 
       public.tb_users_tbu
@@ -46,7 +45,8 @@ async function getUserByEmail(email: string): Promise<User | null> {
 
     return result[0];
   } catch (error) {
-    throw new Error("User not found");
+
+    throw new Error("Usuário nao encontrado");
   }
 }
 
@@ -58,7 +58,6 @@ async function getUserById(id: number): Promise<User | null> {
       name_user_tbu,
       email_user_tbu,
       password_user_tbu,
-      is_active_user_tbu,
       created_at
     FROM 
       public.tb_users_tbu
