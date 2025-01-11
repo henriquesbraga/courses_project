@@ -87,10 +87,9 @@ async function registerUserInCourse(enroll: EnrollUserToCourse) {
   }
 }
 
-
 export {
   createCourse,
   getAllCourses,
   getCoursesByUserId,
-  registerUserInCourse
-}
+  registerUserInCourse,
+};

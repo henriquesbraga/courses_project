@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import {
-  create,
-  findById,
-  loginUser,
-  refreshUserToken,
+  createUserService,
+  findByIdService,
+  loginUserService,
+  refreshUserTokenService,
 } from "../services/user-service";
 import { CreateUserDto } from "../types/create-user-dto";
 
-async function register(req: Request, res: Response) {
+async function registerEndpoint(req: Request, res: Response) {
   const { name, email, password } = req.body;
 
   try {
@@ -17,7 +17,7 @@ async function register(req: Request, res: Response) {
       password_user_tbu: password,
     };
 
-    const newUser = await create(user);
+    const newUser = await createUserService(user);
     res.status(201).json(newUser);
   } catch (error: any) {
     if (
@@ -32,17 +32,17 @@ async function register(req: Request, res: Response) {
   }
 }
 
-async function login(req: Request, res: Response) {
+async function loginEndpoint(req: Request, res: Response) {
   const { email, password } = req.body;
   try {
-    const response = await loginUser(email, password);
+    const response = await loginUserService(email, password);
     res.status(200).json(response);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 }
 
-async function refreshToken(req: Request, res: Response) {
+async function refreshTokenEndpoint(req: Request, res: Response) {
   const { authorization } = req.headers;
 
   try {
@@ -52,7 +52,7 @@ async function refreshToken(req: Request, res: Response) {
       throw new Error("Token não informado");
     }
 
-    const token = await refreshUserToken(bearerToken);
+    const token = await refreshUserTokenService(bearerToken);
 
     res.status(200).json({ token });
   } catch (error: any) {
@@ -60,7 +60,7 @@ async function refreshToken(req: Request, res: Response) {
   }
 }
 
-async function getUserInfo(req: Request, res: Response) {
+async function getUserInfoEndpoint(req: Request, res: Response) {
   const { id } = req.params;
   const { authorization } = req.headers;
 
@@ -73,7 +73,10 @@ async function getUserInfo(req: Request, res: Response) {
       throw new Error("Token não informado");
     }
 
-    const response = await findById(parseInt(id), authorization.split(" ")[1]);
+    const response = await findByIdService(
+      parseInt(id),
+      authorization.split(" ")[1]
+    );
 
     if (!response) {
       res.status(404).json({ message: "Usuário não encontrado" });
@@ -85,6 +88,9 @@ async function getUserInfo(req: Request, res: Response) {
   }
 }
 
-
-
-export { register, login, refreshToken, getUserInfo };
+export {
+  registerEndpoint,
+  loginEndpoint,
+  refreshTokenEndpoint,
+  getUserInfoEndpoint,
+};

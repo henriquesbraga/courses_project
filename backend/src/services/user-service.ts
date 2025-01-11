@@ -11,7 +11,7 @@ import { formatDate } from "../utils/date-utils";
 
 const { SALT_ROUNDS } = process.env;
 
-async function create(user: CreateUserDto) {
+async function createUserService(user: CreateUserDto) {
   try {
     const salt = await bcrypt.genSalt(Number(SALT_ROUNDS));
     const hash = await bcrypt.hash(user.password_user_tbu, salt);
@@ -24,11 +24,11 @@ async function create(user: CreateUserDto) {
   }
 }
 
-async function findByEmail(email: string) {
+async function findByEmailService(email: string) {
   return await getUserByEmail(email);
 }
 
-async function findById(id: number, bearerToken: string) {
+async function findByIdService(id: number, bearerToken: string) {
   // User can only fetch his own data
   const tokenData: CustomJwtPayload = JwtService.verifyToken(bearerToken);
 
@@ -43,9 +43,9 @@ async function findById(id: number, bearerToken: string) {
   }
 }
 
-async function loginUser(email: string, password: string) {
+async function loginUserService(email: string, password: string) {
   try {
-    const user = await findByEmail(email);
+    const user = await findByEmailService(email);
 
     if (!user) {
       throw new Error("Usuário não encontrado");
@@ -77,7 +77,7 @@ async function loginUser(email: string, password: string) {
   }
 }
 
-async function refreshUserToken(bearerToken: string) {
+async function refreshUserTokenService(bearerToken: string) {
   try {
     const data: CustomJwtPayload = JwtService.verifyToken(bearerToken);
 
@@ -96,7 +96,9 @@ async function refreshUserToken(bearerToken: string) {
   }
 }
 
-
-
-
-export { create, loginUser, refreshUserToken, findById };
+export {
+  createUserService,
+  loginUserService,
+  refreshUserTokenService,
+  findByIdService,
+};
