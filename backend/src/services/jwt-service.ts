@@ -27,3 +27,8 @@ const JwtService = {
   }
 
 }
+
+
+export {
+  JwtService
+}
