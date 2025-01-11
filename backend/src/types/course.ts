@@ -1,4 +1,4 @@
-type Course = {
+export type Course = {
   title: string;
   description: string;
   workload: number; //hours

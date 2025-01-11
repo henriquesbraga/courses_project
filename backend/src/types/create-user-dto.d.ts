@@ -1,1 +1,0 @@
-type CreateUserDto = Omit<User, 'id_user_tbu' | 'createdAt'>;

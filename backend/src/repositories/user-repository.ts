@@ -1,18 +1,28 @@
 import sql from "../database/connection";
+import { CreateUserDto } from "../types/create-user-dto";
+import { User } from "../types/user";
+import { getFormattedDate } from "../utils/date-utils";
 
-async function createUser(user: User) {
-  const result = await sql`
+async function createUser(user: CreateUserDto): Promise<User> {
+  try {
+    const result = await sql<User[]>`
     INSERT INTO public.tb_users_tbu (
       name_user_tbu,
       email_user_tbu,
-      password_user_tbu
+      password_user_tbu,
+      created_at
     ) VALUES (
      ${user.name_user_tbu},
      ${user.email_user_tbu},
      ${user.password_user_tbu},
-     NOW()
+     ${getFormattedDate()}
     ) RETURNING *`;
-  return result[0];
+
+    return result[0];
+  } catch (error: any) {
+    console.log("Error while creating user: ", error.message);
+    throw new Error(error.message);
+  }
 }
 
 async function getUserById(id: number): Promise<User | null> {
@@ -28,18 +38,16 @@ async function getUserById(id: number): Promise<User | null> {
     FROM 
       public.tb_users_tbu
     WHERE id_user_tbu = ${id}`;
-    
+
     if (result.length === 0) {
       return null;
     }
 
     return result[0];
-  }
-  catch (error) {
+  } catch (error) {
     throw new Error("User not found");
   }
 }
-
 
 async function updateUser(user: User): Promise<User | null> {
   try {
@@ -51,19 +59,17 @@ async function updateUser(user: User): Promise<User | null> {
       password_user_tbu = ${user.password_user_tbu}
     WHERE id_user_tbu = ${user.id_user_tbu}
     RETURNING *`;
-    
+
     if (result.length === 0) {
       return null;
     }
 
     return result[0];
-  }
-  catch (error) {
+  } catch (error) {
     console.log("Error while updating user: ", error);
     throw new Error("Error while updating user");
   }
 }
-
 
 async function deleteUser(id: number): Promise<boolean> {
   try {
@@ -75,23 +81,16 @@ async function deleteUser(id: number): Promise<boolean> {
     WHERE 
       id_user_tbu = ${id}
     RETURNING *`;
-    
+
     if (result.length === 0) {
       return false;
     }
 
     return true;
-  }
-  catch (error) {
+  } catch (error) {
     console.log("Error while deleting user: ", error);
     throw new Error("Error while deleting user");
   }
 }
 
-
-export {
-  createUser,
-  getUserById,
-  updateUser,
-  deleteUser
-}
+export { createUser, getUserById, updateUser, deleteUser };
