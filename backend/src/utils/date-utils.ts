@@ -11,4 +11,11 @@ function getFormattedDate() {
 }
 
 
-export { getFormattedDate };
+function formatDate(date: string) {
+  return dayjs(date).tz("America/Sao_Paulo").format("YYYY-MM-DDTHH:mm:ssZ");
+}
+
+
+
+
+export { getFormattedDate, formatDate };

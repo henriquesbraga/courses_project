@@ -25,6 +25,31 @@ async function createUser(user: CreateUserDto): Promise<User> {
   }
 }
 
+async function getUserByEmail(email: string): Promise<User | null> {
+
+  try {
+    const result = await sql<User[]>`
+    SELECT
+      id_user_tbu ,
+      name_user_tbu,
+      email_user_tbu,
+      password_user_tbu,
+      is_active_user_tbu,
+      created_at
+    FROM 
+      public.tb_users_tbu
+    WHERE email_user_tbu ilike ${email}`;
+
+    if (result.length === 0) {
+      return null;
+    }
+
+    return result[0];
+  } catch (error) {
+    throw new Error("User not found");
+  }
+}
+
 async function getUserById(id: number): Promise<User | null> {
   try {
     const result = await sql<User[]>`
@@ -93,4 +118,4 @@ async function deleteUser(id: number): Promise<boolean> {
   }
 }
 
-export { createUser, getUserById, updateUser, deleteUser };
+export { createUser, getUserById, getUserByEmail, updateUser, deleteUser };

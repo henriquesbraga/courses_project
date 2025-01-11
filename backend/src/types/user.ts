@@ -4,5 +4,5 @@ export type User = {
   email_user_tbu: string;
   password_user_tbu: string;
   is_active_user_tbu: boolean;
-  createdAt: String;
+  created_at: string;
 }
