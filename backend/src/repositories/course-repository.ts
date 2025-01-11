@@ -1,6 +1,7 @@
 import sql from "../database/connection";
 import { Course } from "../types/course";
 import { CreateCourseDto } from "../types/create-course-dto";
+import { EnrollUserToCourse } from "../types/enroll-user-to-course";
 import { getFormattedDate } from "../utils/date-utils";
 
 async function createCourse(course: CreateCourseDto): Promise<Course> {
@@ -66,18 +67,18 @@ async function getCoursesByUserId(userId: number): Promise<Course[]> {
   }
 }
 
-async function registerUserInCourse(courseId: number, idUser: number) {
+async function registerUserInCourse(enroll: EnrollUserToCourse) {
   try {
-    const result = await sql<Course[]>`
+    await sql`
     INSERT INTO public.rel_courses_users (
       id_course_tbc,
       id_user_tbu,
       registered_at
     ) VALUES (
-      ${courseId},
-      ${idUser},
+      ${enroll.courseId},
+      ${enroll.userId},
       ${getFormattedDate()}
-    );`;
+    )ON CONFLICT (id_course_tbc, id_user_tbu) DO NOTHING;`;
 
     return true;
   } catch (error: any) {
