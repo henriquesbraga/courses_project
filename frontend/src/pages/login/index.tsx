@@ -3,18 +3,17 @@ import {
   Box,
   Container,
   Typography,
-  TextField,
-  Button,
-  Alert,
+  TextField, Alert,
   IconButton,
-  InputAdornment,
+  InputAdornment
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Link } from "react-router";
-import { api } from "../../config/api";
+import { Link, useNavigate } from "react-router";
 import { useUserData } from "../../context/user-context";
 import { isValidEmail } from "../../utils/validators";
+import { login } from "../../repositories/auth-repository";
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -22,43 +21,37 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
-
+ 
   const { setUserData } = useUserData();
+  const navigate = useNavigate();
+
+
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
     setError("");
-    setLoading(true);
 
-    if (!email || !password ) {
+    if (!email || !password) {
       setError("Por favor, preencha todos os campos.");
-      setLoading(false);
       return;
     }
 
-    if(!isValidEmail(email)) {
-      setError("Corrija o email!")
-      setLoading(false);
+    if (!isValidEmail(email)) {
+      setError("Corrija o email!");
       return;
     }
-
 
     try {
-      const response = await api.post("/login", {
-        email,
-        password,
-      });
+      setLoading(true);
 
-      if (response.status != 200) {
-        setError(response.data.message);
-        return;
-      }
+      const data = await login({ email, password });
+      setUserData(data);
+      navigate("/dashboard/my-courses")
 
-      const { data } = response;
-      console.log(data);
+
     } catch (err: any) {
-      console.log(err)
-      setError(err.response.data.message);
+      console.log(err);
+      setError(err);
     } finally {
       setLoading(false);
     }

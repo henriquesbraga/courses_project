@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 const initialUserDataState: LoginApiResponse = {
   id: null,
@@ -21,8 +21,35 @@ const UserContext = createContext<{
 export const UserDataContext: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [userData, setUserData] =
+  const [userData, setUserDataState] =
     useState<LoginApiResponse>(initialUserDataState);
+
+
+    const setUserData = (data: LoginApiResponse) => {
+      localStorage.setItem("userData", JSON.stringify(data))
+      setUserDataState(userData)
+    }
+
+    const loadUserData = () => {
+      const localDataNonParsed = localStorage.getItem("userData");
+
+      if(!localDataNonParsed) {
+        return;
+      }
+
+      const parsed = JSON.parse(localDataNonParsed);
+      setUserDataState(parsed);
+
+    }
+
+
+
+    useEffect(() => {
+      loadUserData()
+    }, [])
+
+
+
 
   const clearUserData = () => {
     setUserData(initialUserDataState);

@@ -12,6 +12,9 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { ArrowBack } from "@mui/icons-material";
 import { useNavigate } from "react-router";
+import { api } from "../../config/api";
+import { login, register } from "../../repositories/auth-repository";
+import { useUserData } from "../../context/user-context";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -19,15 +22,59 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleRegister = (event: React.FormEvent) => {
+
+  const navigate = useNavigate();
+  const { setUserData } = useUserData();
+
+  const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
 
     if (!name || !email || !password) {
       setError("Por favor, preencha todos os campos.");
       return;
     }
+
+    if (password.length < 6) {
+      setError("A senha deve ter no mínimo 6 caracteres.");
+      return;
+    }
+
+
+    try {
+      setLoading(true);
+      const registered = await register({name, email, password});
+
+      if(registered) {
+        const logged = await login({email, password});
+        setUserData(logged);
+
+        // handle navigation
+      }
+
+
+
+
+
+
+
+
+
+
+
+    }
+    catch(err: any) {
+      setError(err);
+    }
+    finally {
+      setLoading(false)
+    }
+
+
+
+
+
 
   };
 

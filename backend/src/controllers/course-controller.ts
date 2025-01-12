@@ -21,7 +21,7 @@ async function getAllCoursesEndpoint(req: Request, res: Response) {
   
   try {
     const result = await getAllCoursesService();
-    res.status(201).json(result);
+    res.status(200).json(result);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
@@ -55,7 +55,7 @@ async function getAllCoursesByUserIdEndpoint(req: Request, res: Response) {
     }
 
     const data = await getAllCoursesByUserIdService(parseInt(userId));
-    res.status(201).json(data);
+    res.status(200).json(data);
   } catch (error: any) {
     res
       .status(500)

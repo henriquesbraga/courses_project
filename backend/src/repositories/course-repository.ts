@@ -48,18 +48,20 @@ async function getCoursesByUserId(userId: number): Promise<Course[]> {
   try {
     const result = await sql<Course[]>`
     SELECT 
-      c.id,
+      c.id AS course_id,
       c.title,
       c.description,
       c.hours,
-      c.created_at,
+      c.created_at AS course_created_at,
       e.enrolled_at
     FROM 
-      enrollments e
-    INNER JOIN
-      courses c ON e.id = c.id
+      public.enrollments e
+    JOIN 
+      public.courses c ON e.course_id = c.id -- Relaciona o ID do curso na tabela de matriculas
+    JOIN 
+      public.users u ON e.user_id = u.id -- Relaciona o usuário na tabela de matriculas
     WHERE 
-      e.id = ${userId};`;
+      e.user_id = ${userId};`;
     return result.map((e) => ({
       ...e,
       created_at: formatDate(e.created_at),

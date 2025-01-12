@@ -3,5 +3,5 @@ type LoginApiResponse = {
   name: string;
   email: string;
   created_at: string;
-  token: string;
+  token?: string;
 };
