@@ -38,6 +38,12 @@ async function loginEndpoint(req: Request, res: Response) {
     const response = await loginUserService(email, password);
     res.status(200).json(response);
   } catch (error: any) {
+
+    if(error.message.includes("Senha inválida")) {
+      res.status(401).json({ message: error.message });
+      return
+    }
+
     res.status(500).json({ message: error.message });
   }
 }
