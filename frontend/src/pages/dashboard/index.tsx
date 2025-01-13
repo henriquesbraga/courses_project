@@ -17,6 +17,8 @@ import {
 import { Menu, Home, Article, Logout, Add } from "@mui/icons-material";
 import { useUserData } from "../../context/user-context";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { toast } from "sonner";
+
 
 const Dashboard = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -135,6 +137,7 @@ const Dashboard = () => {
                   console.log("sair")
                   navigate("/", {replace: true});
                   clearUserData();
+                  toast.success("")
                 }}
               >
                 <ListItemIcon>{<Logout />}</ListItemIcon>
