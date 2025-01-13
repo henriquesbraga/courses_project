@@ -18,7 +18,6 @@ async function createCourseEndpoint(req: Request, res: Response) {
 }
 
 async function getAllCoursesEndpoint(req: Request, res: Response) {
-  
   try {
     const result = await getAllCoursesService();
     res.status(200).json(result);
@@ -35,15 +34,13 @@ async function enrollUserToCourseEndpoint(req: Request, res: Response) {
     await enrollUserToCourseService(enroll);
     res.status(201).json({ message: "Usuário cadastrado com sucesso!" });
   } catch (error: any) {
-    if (error.message.includes("duplicate key value")) {
-      res
-        .status(400)
-        .json({ message: "Usuário já está cadastrado no curso desejado!" });
-      return;
+    var httpError = 500;
+
+    if (error.message.includes("Usuário já cadastrado neste curso!")) {
+      httpError = 409;
     }
-    res
-      .status(500)
-      .json({ message: "Erro ao cadastrar usuário no curso desejado." });
+
+    res.status(httpError).json({ message: error.message });
   }
 }
 

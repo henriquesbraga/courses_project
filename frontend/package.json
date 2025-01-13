@@ -23,7 +23,8 @@
     "react-hook-form": "^7.54.2",
     "react-router": "^7.1.1",
     "react-router-dom": "^7.1.1",
-    "react-shimmer": "^3.2.0"
+    "react-shimmer": "^3.2.0",
+    "sonner": "^1.7.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

@@ -7,14 +7,14 @@ import {
   Button,
   IconButton,
   InputAdornment,
-  Alert
+  Alert,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { ArrowBack } from "@mui/icons-material";
-import { useNavigate } from "react-router";
-import { api } from "../../config/api";
+import { useNavigate } from "react-router-dom";
 import { login, register } from "../../repositories/auth-repository";
 import { useUserData } from "../../context/user-context";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -23,7 +23,6 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
-
 
   const navigate = useNavigate();
   const { setUserData } = useUserData();
@@ -41,41 +40,22 @@ const Register = () => {
       return;
     }
 
-
     try {
       setLoading(true);
-      const registered = await register({name, email, password});
+      const registered = await register({ name, email, password });
 
-      if(registered) {
-        const logged = await login({email, password});
+      if (registered.id) {
+        const logged = await login({ email, password });
         setUserData(logged);
 
         // handle navigation
+        navigate("/dashboard");
       }
-
-
-
-
-
-
-
-
-
-
-
-    }
-    catch(err: any) {
+    } catch (err: any) {
       setError(err);
+    } finally {
+      setLoading(false);
     }
-    finally {
-      setLoading(false)
-    }
-
-
-
-
-
-
   };
 
   const togglePasswordVisibility = () => {
@@ -166,15 +146,16 @@ const Register = () => {
           />
 
           {/* Botão de Registro */}
-          <Button
+          <LoadingButton
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
             sx={{ mt: 2, py: 1.5, fontWeight: "bold" }}
+            loading={loading}
           >
             Registrar
-          </Button>
+          </LoadingButton>
         </form>
       </Container>
     </Box>

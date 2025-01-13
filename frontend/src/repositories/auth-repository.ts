@@ -27,6 +27,8 @@ export async function register(
   data: RegisterRequest
 ): Promise<LoginApiResponse> {
   return new Promise(async (resolve, reject) => {
+    console.log("try register");
+    
     const { name, email, password } = data;
 
     try {
@@ -36,12 +38,12 @@ export async function register(
         password,
       });
 
-      if (response.status != 200) {
+      if (response.status != 201) {
         reject(response.data.message);
-        return;
       }
+
       const { data } = response;
-      console.log("data", data);
+      
       resolve(data);
     } catch (err: any) {
       reject(err.response.data.message);

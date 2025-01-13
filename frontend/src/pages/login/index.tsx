@@ -45,6 +45,7 @@ const Login = () => {
       setLoading(true);
 
       const data = await login({ email, password });
+      console.log("data login ", data)
       setUserData(data);
       navigate("/dashboard/my-courses")
 

@@ -3,7 +3,7 @@ import { useUserData } from "../../context/user-context";
 import { getUserCourses } from "../../repositories/course-repository";
 import { Image, Shimmer } from "react-shimmer";
 import { Box, Container } from "@mui/material";
-import CourseCard from "./course-card";
+import CourseCard from "../../components/course-card";
 
 const MyCourses = () => {
   const { userData } = useUserData();
@@ -26,7 +26,7 @@ const MyCourses = () => {
 
   useEffect(() => {
     (async () => {
-      if (userData.id) await fetchCourses();
+      if (userData.id && userData.token) await fetchCourses();
     })();
   }, []);
 

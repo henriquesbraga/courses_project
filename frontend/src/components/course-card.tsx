@@ -2,24 +2,21 @@ import React from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 
-interface CourseApiResponse {
-  title: string;
-  description: string;
-  hours: number;
-  image?: string; // Opcional: imagem do curso
-}
-
 interface CourseCardProps {
   course: CourseApiResponse;
   renderButton: boolean;
+  onButtonPress: (courseId: number) => void;
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({ course, renderButton }) => (
+const CourseCard: React.FC<CourseCardProps> = ({
+  course,
+  renderButton,
+  onButtonPress,
+}) => (
   <Card
     variant="outlined"
     sx={{
@@ -42,15 +39,16 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, renderButton }) => (
       >
         {course.title}
       </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mt: 1, mb: 2 }}>
+
+      <Typography variant="body2" color="text.secondary" sx={{ mt: 1, mb: 1 }}>
         {course.description}
       </Typography>
+
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mt: 2,
+          flexDirection: "column", // Transforma em coluna
+          gap: 1,
         }}
       >
         <Typography
@@ -59,16 +57,28 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, renderButton }) => (
         >
           Carga horária: {course.hours} hora(s)
         </Typography>
+
+        {course.enrolled_at && (
+          <Typography
+            variant="caption"
+            sx={{ fontSize: 14, color: "text.secondary" }}
+          >
+            Data da matrícula: {course.enrolled_at}
+          </Typography>
+        )}
       </Box>
     </CardContent>
 
     {renderButton && (
-      <CardActions sx={{ justifyContent: "flex-end", p: 2, pt: 0 }}>
+      <CardActions sx={{ justifyContent: "center", p: 2, pt: 0 }}>
         <Button
           size="small"
           variant="contained"
           color="primary"
-          sx={{ textTransform: "none" }}
+          sx={{ textTransform: "none", width: "100%" }}
+          onClick={() => {
+            onButtonPress(course.id!);
+          }}
         >
           Matricular
         </Button>

@@ -1,7 +1,8 @@
 type CourseApiResponse = {
-  id: number;
+  id?: number;
   title: string;
   description: string;
   hours: number;
-  created_at: string;
+  created_at?: string;
+  enrolled_at?: string;
 };

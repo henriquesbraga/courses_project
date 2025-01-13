@@ -14,7 +14,7 @@ import {
   ListItemButton,
   useTheme,
 } from "@mui/material";
-import { Menu, Home, Article, Logout } from "@mui/icons-material";
+import { Menu, Home, Article, Logout, Add } from "@mui/icons-material";
 import { useUserData } from "../../context/user-context";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 
@@ -29,6 +29,11 @@ const Dashboard = () => {
   const toggleDrawer = (open: boolean) => {
     setDrawerOpen(open);
   };
+
+  useEffect(() => {
+    console.log('userdata', userData);
+    
+  }, [userData])
 
   const handleNavigation = (path: string, newTitle: string) => {
     navigate(path);
@@ -54,7 +59,7 @@ const Dashboard = () => {
     <>
       <CssBaseline />
       {/* Top Bar */}
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton
             edge="start"
@@ -64,6 +69,7 @@ const Dashboard = () => {
           >
             <Menu />
           </IconButton>
+
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {title}
           </Typography>
@@ -93,6 +99,13 @@ const Dashboard = () => {
             >
               {userData.email}
             </Typography>
+            <Typography
+              variant="body2"
+              sx={{ color: "#FFF" }}
+              color="textSecondary"
+            >
+              Registrado em:<br />{userData.created_at}
+            </Typography>
           </Box>
 
           <List>
@@ -117,7 +130,13 @@ const Dashboard = () => {
             </ListItem>
 
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton
+                onClick={() => {
+                  console.log("sair")
+                  navigate("/", {replace: true});
+                  clearUserData();
+                }}
+              >
                 <ListItemIcon>{<Logout />}</ListItemIcon>
                 <ListItemText primary={"Sair"} />
               </ListItemButton>
@@ -127,7 +146,10 @@ const Dashboard = () => {
       </Drawer>
 
       {/* Conteúdo Principal */}
-      <Box sx={{ p: 3 }}>
+      <Box sx={{ 
+        pt: { xs: 8, sm: 10 }, 
+        pb: { xs: 2, sm: 0 }
+      }}>
         <Outlet />
       </Box>
     </>

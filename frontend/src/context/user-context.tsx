@@ -1,4 +1,11 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { api } from "../config/api";
 
 const initialUserDataState: LoginApiResponse = {
   id: null,
@@ -24,35 +31,28 @@ export const UserDataContext: React.FC<{ children: ReactNode }> = ({
   const [userData, setUserDataState] =
     useState<LoginApiResponse>(initialUserDataState);
 
+  const setUserData = (data: LoginApiResponse) => {
+    localStorage.setItem("userData", JSON.stringify(data));
+    setUserDataState(data);
+  };
 
-    const setUserData = (data: LoginApiResponse) => {
-      localStorage.setItem("userData", JSON.stringify(data))
-      setUserDataState(userData)
+  const loadUserData = () => {
+    const localDataNonParsed = localStorage.getItem("userData");
+
+    if (!localDataNonParsed) {
+      return;
     }
 
-    const loadUserData = () => {
-      const localDataNonParsed = localStorage.getItem("userData");
+    const parsed = JSON.parse(localDataNonParsed);
+    setUserDataState(parsed);
+  };
 
-      if(!localDataNonParsed) {
-        return;
-      }
-
-      const parsed = JSON.parse(localDataNonParsed);
-      setUserDataState(parsed);
-
-    }
-
-
-
-    useEffect(() => {
-      loadUserData()
-    }, [])
-
-
-
+  useEffect(() => {
+    loadUserData();
+  }, []);
 
   const clearUserData = () => {
-    setUserData(initialUserDataState);
+    setUserDataState(initialUserDataState);
   };
 
   return (
@@ -62,11 +62,10 @@ export const UserDataContext: React.FC<{ children: ReactNode }> = ({
   );
 };
 
-
 export const useUserData = () => {
   const context = useContext(UserContext);
   if (!context) {
-    throw new Error('useUserData must be used within a DadosUsuarioProvider');
+    throw new Error("useUserData must be used within a DadosUsuarioProvider");
   }
   return context;
 };
