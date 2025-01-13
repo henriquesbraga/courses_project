@@ -1,4 +1,5 @@
 import sql from "../database/connection";
+import { Course } from "../types/course";
 import { CreateUserDto } from "../types/create-user-dto";
 import { User } from "../types/user";
 import { formatDate, getFormattedDate } from "../utils/date-utils";
@@ -78,4 +79,48 @@ async function getUserById(id: number): Promise<User | null> {
   }
 }
 
-export { createUser, getUserById, getUserByEmail };
+async function getAllUsersWithHisCourses() {
+  try {
+    const result = await sql`
+      SELECT 
+        u.id,
+        u.name,
+        u.email,
+        u.created_at,
+        COALESCE(
+          json_agg(
+            json_build_object(
+              'id', c.id,
+              'title', c.title,
+              'description', c.description,
+              'enrolled_at', e.enrolled_at
+            )
+          ) FILTER (WHERE c.id IS NOT NULL),
+          '[]'
+        ) AS courses
+      FROM 
+        users u
+      LEFT JOIN 
+        enrollments e ON u.id = e.user_id
+      LEFT JOIN 
+        courses c ON e.course_id = c.id
+      GROUP BY 
+        u.id, u.name, u.email
+      ORDER BY 
+        u.id;
+    `;
+    return result.map((user) => ({
+      ...user,
+      created_at: formatDate(user.created_at),
+      courses: user.courses.map((course: Course) => ({
+        ...course,
+        enrolled_at: formatDate(course.enrolled_at!),
+      })),
+    }));
+  } catch (error: any) {
+    console.log("Erro ao carregar usuários: ", error.message);
+    throw new Error(error.message);
+  }
+}
+
+export { createUser, getUserById, getUserByEmail, getAllUsersWithHisCourses };

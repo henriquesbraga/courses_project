@@ -3,9 +3,10 @@ import {
   createCourseService,
   getAllCoursesService,
   enrollUserToCourseService,
-  getAllCoursesByUserIdService,
+  getAllCoursesByUserIdService
 } from "../services/course-service";
 import { EnrollUserToCourse } from "../types/enroll-user-to-course";
+import { getAllUsersWithHisCoursesService } from "../services/user-service";
 
 async function createCourseEndpoint(req: Request, res: Response) {
   const course = req.body;
@@ -60,9 +61,21 @@ async function getAllCoursesByUserIdEndpoint(req: Request, res: Response) {
   }
 }
 
+async function getAllUsersWithHisCoursesEndpoint(req: Request, res: Response) {
+  try {
+    const data = await getAllUsersWithHisCoursesService();
+    res.status(200).json(data);
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ message: "Erro ao carregar dados. Tente novamente mais tarde." });
+  }
+}
+
 export {
   createCourseEndpoint,
   getAllCoursesEndpoint,
   enrollUserToCourseEndpoint,
   getAllCoursesByUserIdEndpoint,
+  getAllUsersWithHisCoursesEndpoint,
 };

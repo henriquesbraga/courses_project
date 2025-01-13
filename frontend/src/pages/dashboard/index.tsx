@@ -14,7 +14,7 @@ import {
   ListItemButton,
   useTheme,
 } from "@mui/material";
-import { Menu, Home, Article, Logout } from "@mui/icons-material";
+import { Menu, Home, Article, Logout, SupervisorAccount } from "@mui/icons-material";
 import { useUserData } from "../../context/user-context";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "sonner";
@@ -129,11 +129,22 @@ const Dashboard = () => {
 
             <ListItem disablePadding>
               <ListItemButton
+                onClick={() =>
+                  handleNavigation("users", "Alunos matriculados")
+                }
+              >
+                <ListItemIcon>{<SupervisorAccount />}</ListItemIcon>
+                <ListItemText primary={"Alunos"} />
+              </ListItemButton>
+            </ListItem>
+
+            <ListItem disablePadding>
+              <ListItemButton
                 onClick={() => {
                   console.log("sair")
                   navigate("/", {replace: true});
                   clearUserData();
-                  toast.success("")
+                  toast.success("Até a próxima")
                 }}
               >
                 <ListItemIcon>{<Logout />}</ListItemIcon>

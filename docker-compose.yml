@@ -26,6 +26,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "4000:4000"
+    environment:
+      - NODE_ENV=production
     env_file:
       - ./backend/.env
     depends_on:

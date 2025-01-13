@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import {
   createUserService,
   findByIdService,
+  getAllUsersWithHisCoursesService,
   loginUserService,
   refreshUserTokenService,
 } from "../services/user-service";
@@ -94,9 +95,22 @@ async function getUserInfoEndpoint(req: Request, res: Response) {
   }
 }
 
+async function getAllUsersWithHisCoursesEndpoint(req: Request, res: Response) {
+  
+  try {
+    const data = await getAllUsersWithHisCoursesService();
+    res.status(200).json(data);
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ message: "Erro ao carregar dados. Tente novamente mais tarde." });
+  }
+}
+
 export {
   registerEndpoint,
   loginEndpoint,
   refreshTokenEndpoint,
   getUserInfoEndpoint,
+  getAllUsersWithHisCoursesEndpoint
 };

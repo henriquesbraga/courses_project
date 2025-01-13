@@ -109,3 +109,32 @@ export async function enrollUserToACourse(
     }
   });
 }
+
+
+
+export async function getAllUsersWithHisCourses(
+  access_token: string
+): Promise<UserWithCourse[]> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await api.get(`users/all`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
+
+      if (response.status !== 200) {
+        console.log("err res", response.status);
+        reject(response.data.message);
+        return;
+      }
+
+      resolve(response.data);
+    } catch (err: any) {
+
+      reject(err.response.data.message);
+    }
+  });
+}
+

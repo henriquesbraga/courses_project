@@ -81,7 +81,7 @@ export const UserDataContext: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  useTokenRefresh(refreshToken, 10000, userData.token !== "");
+  useTokenRefresh(refreshToken, 1800000, userData.token !== "");
 
   return (
     <UserContext.Provider value={{ userData, setUserData, clearUserData }}>

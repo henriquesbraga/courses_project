@@ -5,6 +5,7 @@ import {
   getUserInfoEndpoint,
   loginEndpoint,
   refreshTokenEndpoint,
+  getAllUsersWithHisCoursesEndpoint,
 } from "./controllers/auth-controller";
 import { validateRequest } from "./middlewares/validate-request";
 import { createUserSchema } from "./schemas/create-user-schema";
@@ -23,7 +24,9 @@ const router = Router();
 
 // User routes
 router.post("/users", validateRequest(createUserSchema), registerEndpoint);
+router.get("/users/all", authenticate, getAllUsersWithHisCoursesEndpoint);
 router.get("/users/:id", authenticate, getUserInfoEndpoint);
+
 
 // Auth routes
 router.post("/login", validateRequest(loginSchema), loginEndpoint);

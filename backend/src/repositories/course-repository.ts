@@ -105,14 +105,6 @@ async function checkIfUserIsAlreadyRegisteredInCourse(
   enroll: EnrollUserToCourse
 ) {
   try {
-    console.log(`
-      SELECT EXISTS (
-	      SELECT 1
-        FROM public.enrollments e 
-        WHERE e.course_id = ${enroll.courseId} and e.user_id = ${enroll.userId}
-      )
-    `);
-
     const result = await sql`
       SELECT EXISTS (
 	      SELECT 1
@@ -127,9 +119,10 @@ async function checkIfUserIsAlreadyRegisteredInCourse(
   }
 }
 
+
 export {
   createCourse,
   getAllCourses,
   getCoursesByUserId,
-  registerUserInCourse,
+  registerUserInCourse
 };

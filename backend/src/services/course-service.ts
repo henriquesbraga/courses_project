@@ -23,9 +23,11 @@ async function getAllCoursesByUserIdService(userId: number) {
   return await getCoursesByUserId(userId);
 }
 
+
+
 export {
   createCourseService,
   getAllCoursesService,
   enrollUserToCourseService,
-  getAllCoursesByUserIdService,
+  getAllCoursesByUserIdService
 };

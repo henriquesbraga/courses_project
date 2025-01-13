@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import {
   createUser,
+  getAllUsersWithHisCourses,
   getUserByEmail,
   getUserById,
 } from "../repositories/user-repository";
@@ -103,9 +104,15 @@ async function refreshUserTokenService(bearerToken: string) {
   }
 }
 
+async function getAllUsersWithHisCoursesService() {
+  return await getAllUsersWithHisCourses()
+}
+
+
 export {
   createUserService,
   loginUserService,
   refreshUserTokenService,
   findByIdService,
+  getAllUsersWithHisCoursesService
 };
