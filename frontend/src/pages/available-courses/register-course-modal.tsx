@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Box, Typography, TextField, Button } from "@mui/material";
 import {
-  createCourse,
-  getAllCourses,
+  createCourse
 } from "../../repositories/course-repository";
 import { useUserData } from "../../context/user-context";
 

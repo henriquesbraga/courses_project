@@ -14,7 +14,7 @@ import {
   ListItemButton,
   useTheme,
 } from "@mui/material";
-import { Menu, Home, Article, Logout, Add } from "@mui/icons-material";
+import { Menu, Home, Article, Logout } from "@mui/icons-material";
 import { useUserData } from "../../context/user-context";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "sonner";
@@ -32,10 +32,6 @@ const Dashboard = () => {
     setDrawerOpen(open);
   };
 
-  useEffect(() => {
-    console.log('userdata', userData);
-    
-  }, [userData])
 
   const handleNavigation = (path: string, newTitle: string) => {
     navigate(path);

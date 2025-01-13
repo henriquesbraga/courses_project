@@ -17,7 +17,7 @@ const AvailableCourses = () => {
     useState<CourseApiResponse[]>();
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
+  const [_, setError] = useState<string>("");
 
   async function fetchCourses() {
     try {

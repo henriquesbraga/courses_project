@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useUserData } from "../../context/user-context";
 import { getUserCourses } from "../../repositories/course-repository";
-import { Image, Shimmer } from "react-shimmer";
+import { Shimmer } from "react-shimmer";
 import { Box, Container } from "@mui/material";
 import CourseCard from "../../components/course-card";
 
@@ -9,7 +9,7 @@ const MyCourses = () => {
   const { userData } = useUserData();
   const [userCourses, setUserCourses] = useState<CourseApiResponse[]>();
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
+  const [_, setError] = useState<string>("");
 
   async function fetchCourses() {
     try {

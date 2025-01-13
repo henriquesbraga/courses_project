@@ -9,7 +9,7 @@ import { Box } from "@mui/material";
 interface CourseCardProps {
   course: CourseApiResponse;
   renderButton: boolean;
-  onButtonPress: (courseId: number) => void;
+  onButtonPress?: (courseId: number) => void;
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({
@@ -77,7 +77,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
           color="primary"
           sx={{ textTransform: "none", width: "100%" }}
           onClick={() => {
-            onButtonPress(course.id!);
+            onButtonPress!(course.id!);
           }}
         >
           Matricular
