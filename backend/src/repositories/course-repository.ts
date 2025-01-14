@@ -55,7 +55,7 @@ async function getCoursesByUserId(userId: number): Promise<Course[]> {
       c.title,
       c.description,
       c.hours,
-      c.created_at AS course_created_at,
+      c.created_at,
       e.enrolled_at
     FROM 
       public.enrollments e
