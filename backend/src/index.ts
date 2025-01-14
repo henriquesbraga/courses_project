@@ -15,6 +15,6 @@ server.use(express.json());
 server.use(router);
 
 
-server.listen(4000, () => {
+server.listen(4000, '0.0.0.0',() => {
   console.log(" Backend server is running on port 4000");
 });
