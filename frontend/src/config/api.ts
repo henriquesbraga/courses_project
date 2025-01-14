@@ -4,7 +4,7 @@ import axios from "axios";
 
 const baseURL =
   process.env.NODE_ENV === 'production'
-    ? 'http://backend:4000'
+    ? 'https://courseproject.henriquelabs.com.br/api/'
     : 'http://localhost:4000';
 
 
