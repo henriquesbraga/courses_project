@@ -3,6 +3,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { Box, Divider } from "@mui/material";
+import { formatToLocalDatetime } from "../utils/date-util";
 
 
 
@@ -47,7 +48,7 @@ const UserWithCourseCard: React.FC<UserWithCourseCardProps> = ({ user }) => (
         variant="caption"
         sx={{ fontSize: 14, color: "text.secondary" }}
       >
-        Usuário desde: {user.created_at}
+        Usuário desde: {formatToLocalDatetime(user.created_at)}
       </Typography>
 
       <Divider sx={{ my: 2 }} />
@@ -81,7 +82,7 @@ const UserWithCourseCard: React.FC<UserWithCourseCardProps> = ({ user }) => (
                 variant="caption"
                 sx={{ fontSize: 14, color: "text.secondary" }}
               >
-                Data da matrícula: {course.enrolled_at}
+                Data da matrícula: {formatToLocalDatetime(course.enrolled_at!)}
               </Typography>
             </Box>
           ))}

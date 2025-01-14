@@ -18,6 +18,7 @@ import { Menu, Home, Article, Logout, SupervisorAccount } from "@mui/icons-mater
 import { useUserData } from "../../context/user-context";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "sonner";
+import { formatToLocalDatetime } from "../../utils/date-util";
 
 
 const Dashboard = () => {
@@ -102,7 +103,7 @@ const Dashboard = () => {
               sx={{ color: "#FFF" }}
               color="textSecondary"
             >
-              Registrado em:<br />{userData.created_at}
+              Registrado em:<br />{formatToLocalDatetime(userData.created_at)}
             </Typography>
           </Box>
 

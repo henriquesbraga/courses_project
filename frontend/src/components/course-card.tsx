@@ -5,6 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
+import { formatToLocalDatetime } from "../utils/date-util";
 
 interface CourseCardProps {
   course: CourseApiResponse;
@@ -58,12 +59,19 @@ const CourseCard: React.FC<CourseCardProps> = ({
           Carga horária: {course.hours} hora(s)
         </Typography>
 
+        <Typography
+          variant="caption"
+          sx={{ fontSize: 14, color: "text.secondary" }}
+        >
+          Cadastrado em: {formatToLocalDatetime(course.created_at!)}
+        </Typography>
+
         {course.enrolled_at && (
           <Typography
             variant="caption"
             sx={{ fontSize: 14, color: "text.secondary" }}
           >
-            Data da matrícula: {course.enrolled_at}
+            Data da matrícula: {formatToLocalDatetime(course.enrolled_at)}
           </Typography>
         )}
       </Box>
