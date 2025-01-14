@@ -27,7 +27,7 @@ Liste os requisitos para rodar a API:
 
 1. Clone este repositório:
   ```bash
-  git clone https://github.com/seu-usuario/nome-da-api.git
+  git clone https://github.com/henriquesbraga/courses_project.git
   ```
 
 2. Acesse o diretório do backend, instale as dependências e execute o build:
@@ -62,6 +62,8 @@ Liste os requisitos para rodar a API:
   ```bash
   cd frontend && npm i && npm run dev
   ```
+
+ (Uma alternativa: comentar os serviços de frontend e backend no docker-compose.yml e e deixar apenas o serviço do banco (db) e não precisa alterar nada no .env) 
 
 ## Stack
   Para o backend, eu escolhi usar o Express devido o sistema não ter uma complexidade muito grande, não ter muitas rotas e não ter muitas entidades.
