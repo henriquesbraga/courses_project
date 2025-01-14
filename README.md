@@ -1,6 +1,5 @@
 # Plataforma de cursos
 
-Uma breve descrição da API, o que ela faz e para que serve.
 
 ## Índice
 
